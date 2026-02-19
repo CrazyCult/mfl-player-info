@@ -8,6 +8,7 @@ import { SpinnerIcon } from '../SpinnerIcon';
 import { CareerStats } from './CareerStats';
 import type { Player } from '@/types/global.types';
 import { ShareCardButton } from './ShareCardButton';
+import { PlayerProgression } from './PlayerProgression';
 
 export default function Player({ player }: { player: Player }) {
   const isGoalkeeper = player.metadata.positions.includes('GK');

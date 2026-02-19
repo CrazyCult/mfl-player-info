@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Player } from '@/types/global.types';
 
 export async function BasicInfo({ player }: { player: Player }) {
-  const { firstName, lastName, age, height, preferredFoot, positions } =
+  const { firstName, lastName, age, height, preferredFoot, positions, retirementYears } =
     player.metadata;
   const fullName = `${firstName} ${lastName}`;
   const metadata = {

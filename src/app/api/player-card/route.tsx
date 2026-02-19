@@ -91,7 +91,7 @@ export async function GET(request: Request) {
       const rating = calcRating(player, p);
       const diff = rating - overall;
       return { pos: p, badge, badgeColor, rating, diff };
-    }).sort((a, b) => sortOrder(a.pos) - sortOrder(b.pos));
+    }).sort((a, b) => b.rating - a.rating);
 
   return new ImageResponse(
     (
@@ -163,7 +163,7 @@ export async function GET(request: Request) {
                   <span style={{ fontSize: "10px", fontWeight: 700, background: badgeColor, color: "#fff", padding: "2px 6px", borderRadius: "3px" }}>{badge}</span>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  <span style={{ fontSize: "12px", color: diff < 0 ? "#ef4444" : "#94a3b8", fontWeight: 600, width: "28px", textAlign: "right" }}>{diff === 0 ? "0" : diff}</span>
+                  <span style={{ fontSize: "12px", color: diff < 0 ? "#ef4444" : diff > 0 ? "#16a34a" : "#94a3b8", fontWeight: 700, width: "28px", textAlign: "right" }}>{diff === 0 ? "0" : diff}</span>
                   <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: ratingBg(rating), display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <span style={{ fontSize: "15px", fontWeight: 800, color: ratingFg(rating) }}>{rating}</span>
                   </div>
