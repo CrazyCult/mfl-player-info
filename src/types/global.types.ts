@@ -21,6 +21,7 @@ export interface NFTMetadata {
   defense: string;
   potential: string;
   goalkeeping: string;
+  retirementYears?: number;
   ageAtMint: string;
   passing: string;
 }
