@@ -1,10 +1,6 @@
 import Link from 'next/link';
 import { MFLIcon } from '../MFLIcon';
-import { Wallet } from '../Wallet';
-import { Suspense } from 'react';
-import { Button } from '../UI/button';
 import { CommandMenu } from '../Search/CommandMenu';
-import { Loader2Icon } from 'lucide-react';
 
 export function Header() {
   return (
@@ -26,17 +22,7 @@ export function Header() {
             <CommandMenu />
           </div>
 
-          <div className='flex items-center justify-end gap-4'>
-            <Suspense
-              fallback={
-                <Button disabled>
-                  <Loader2Icon className='animate-spin' />
-                </Button>
-              }
-            >
-              <Wallet />
-            </Suspense>
-          </div>
+          <div className='h-9 w-9' />
         </div>
       </div>
     </header>
