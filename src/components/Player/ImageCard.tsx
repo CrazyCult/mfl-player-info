@@ -55,3 +55,4 @@ export function ImageCard({ player }: { player: Player }) {
   );
 }
 
+

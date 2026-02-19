@@ -264,6 +264,13 @@ export function PositionRatings({ player }: { player: Player }) {
                   ) {
                     return null;
                   }
+                  const familiarity = positionalFamiliarity.find(
+                    (pos) => pos.primaryPosition === player.metadata.positions[0]
+                  );
+                  const isPrimary = player.metadata.positions[0] === position;
+                  const isSecondary = player.metadata.positions.slice(1).includes(position);
+                  const adjustment = familiarity?.adjustment[position as keyof typeof familiarity.adjustment];
+                  if (!isPrimary && !isSecondary && adjustment !== -5 && adjustment !== -8) return null;
                   return (
                     <div key={position} className='grid grid-cols-2 py-1.5'>
                       <div className='flex items-center gap-3'>
@@ -318,5 +325,6 @@ export function PositionRatings({ player }: { player: Player }) {
     </>
   );
 }
+
 
 

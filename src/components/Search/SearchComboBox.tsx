@@ -134,7 +134,7 @@ export function SearchComboBox({
                     <div className='flex items-center space-x-3'>
                       <Image
                         className='w-8'
-                        src={`https://d13e14gtps4iwl.cloudfront.net/players/${option.id}/card_512.png`}
+                        src={`https://d13e14gtps4iwl.cloudfront.net/players/v2/${option.id}/card.png`}
                         alt={`Player ${option.id}`}
                         width='512'
                         height='748'
@@ -179,4 +179,6 @@ export function SearchComboBox({
     </Combobox>
   );
 }
+
+
 
