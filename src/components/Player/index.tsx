@@ -41,7 +41,7 @@ export default function Player({ player }: { player: Player }) {
       >
         <ContractStats player={player} />
       <div className='mt-6 flex justify-end'>
-        <ShareCardButton targetId='player-share-card' />
+        <ShareCardButton playerId={player.id} />
       </div>
       </Suspense>
     </div>
