@@ -54,34 +54,3 @@ export const getCareerStatsByPlayer = async (player: Player) => {
   const careerStats = await res.json();
   return careerStats;
 };
-
-export const getAllPlayersByOwner = async (address: string) => {
-  const LIMIT = 400;
-  let page = 0;
-  let hasChecked = false;
-  let players: Player[] = [];
-  let done = false;
-
-  while (!done) {
-    const query: string = hasChecked
-      ? `&beforePlayerId=${players[players.length - 1].id}`
-      : '';
-
-    const res = await fetch(
-      `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players?ownerWalletAddress=${address}&limit=${LIMIT}${query}`,
-      {
-        cache: 'force-cache',
-        next: { revalidate: 3600 },
-      }
-    );
-    const retrievedPlayers = await res.json();
-    players.push(...retrievedPlayers);
-    if (retrievedPlayers.length === 0 || players.length < (page + 1) * 400) {
-      done = true;
-    }
-    page++;
-    hasChecked = true;
-  }
-
-  return players;
-};

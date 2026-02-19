@@ -4,21 +4,11 @@ import {
   ArrowTopRightOnSquareIcon,
   ArrowsRightLeftIcon,
 } from '@heroicons/react/20/solid';
-import { SpinnerIcon } from '../SpinnerIcon';
 import { Suspense } from 'react';
-import { ToggleFavouriteButton } from '../Favourites/ToggleFavouriteButton';
 import { ForSale } from './ForSale';
 import { PlayerContract } from './PlayerContract';
 import { Player } from '@/types/global.types';
-import { Button } from '../UI/button';
-
-function LoadingFavouriteButton() {
-  return (
-    <div className='rounded-md bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-600 opacity-50 shadow-xs ring-1 ring-slate-300 ring-inset dark:bg-white/10 dark:text-white dark:ring-slate-700'>
-      <SpinnerIcon className='size-4 animate-spin' />
-    </div>
-  );
-}
+import { Button } from '../UI/Button';
 
 export function ImageCard({ player }: { player: Player }) {
   return (
@@ -33,15 +23,12 @@ export function ImageCard({ player }: { player: Player }) {
         priority
       />
       <div className='mt-3 flex flex-col items-center justify-center gap-1'>
-        <PlayerContract club={player.activeContract?.club} />
+        <PlayerContract player={player} />
         <Suspense>
           <ForSale player={player} />
         </Suspense>
       </div>
       <div className='mt-4 flex items-center justify-center space-x-1.5'>
-        <Suspense fallback={<LoadingFavouriteButton />}>
-          <ToggleFavouriteButton player={player} isFavourite={false} variant="secondary" />
-        </Suspense>
         <Button asChild size='sm' variant='secondary'>
           <Link
             href={{

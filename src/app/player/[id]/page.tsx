@@ -1,25 +1,28 @@
-import { ClientPlayerPage } from '@/components/Player/ClientPlayerPage';
+import Player from '@/components/Player';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { openGraph, twitter } from '@/app/shared-meta';
 import { getPlayerById } from '@/data/players';
 
 type Props = {
-  params: Promise<{ id: string }>;
+  params: Promise<{ id: number }>;
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
 export const experimental_ppr = true;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const id = parseInt((await params).id, 10);
+  const id = (await params).id;
 
-  const player = await getPlayerById(id).catch(() => null);
+  // fetch data
+  const player = await getPlayerById(id);
 
   if (!player) return notFound();
 
-  const title = `${player.metadata.firstName} ${player.metadata.lastName} | #${id} | MFL Player Info`;
-  const url = `${process.env.NEXT_PUBLIC_SITE_URL}/player/${id}`;
+  const { firstName, lastName } = player.metadata;
+
+  const title = `${firstName} ${lastName} | #${id} | MFL Player Info`;
+  const url = `${process.env.NEXT_SITE_URL}/player/${id}`;
 
   return {
     title,
@@ -39,7 +42,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function PlayerPage({ params }: Props) {
-  const id = parseInt((await params).id, 10);
+  const id = (await params).id;
 
-  return <ClientPlayerPage playerId={id} />;
+  const player = await getPlayerById(id);
+
+  if (!player) notFound();
+
+  return <Player player={player} />;
 }

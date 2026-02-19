@@ -1,20 +1,14 @@
 import './globals.css';
-import { Titillium_Web } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import { Metadata, Viewport } from 'next';
 import { ReactNode } from 'react';
-import { UserProvider } from '@/components/Wallet/UserProvider';
-import { QueryProvider } from '@/providers/QueryProvider';
 import { Header } from '@/components/Header';
 import { Footer } from '@/components/Footer';
 import { openGraph, twitter } from './shared-meta';
 import { Toaster } from 'sonner';
-import { NuqsAdapter } from 'nuqs/adapters/next/app';
 
-const titilliumWeb = Titillium_Web({
-  weight: ['400', '600', '700'],
-  subsets: ['latin'],
-});
+const inter = Inter({ subsets: ['latin'] });
 
 export const viewport: Viewport = {
   themeColor: [
@@ -24,7 +18,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://mfl-player-info.vercel.app'),
+  metadataBase: new URL(process.env.NEXT_SITE_URL!),
   title: 'MFL Player Info | Ratings Calculator & Contract Details',
   description:
     'Calculate the overall rating and get contract data for any Metaverse Football League (MFL) player using their player ID.',
@@ -54,29 +48,23 @@ export const metadata: Metadata = {
   twitter,
 };
 
-export default async function RootLayout({
+export const experimental_ppr = true;
+
+export default function RootLayout({
   children,
 }: {
   children: ReactNode;
 }) {
-  const userPromise = Promise.resolve(null);
-
   return (
     <html lang='en'>
       <body
-        className={`${titilliumWeb.className} bg-background text-foreground flex min-h-screen flex-col`}
+        className={`${inter.className} bg-background text-foreground flex min-h-screen flex-col`}
       >
-        <QueryProvider>
-          <UserProvider userPromise={userPromise}>
-            <NuqsAdapter>
-              <Header />
-              <main className='mx-auto w-full max-w-7xl flex-1 px-4 sm:px-6 lg:px-8'>
-                {children}
-              </main>
-              <Footer />
-            </NuqsAdapter>
-          </UserProvider>
-        </QueryProvider>
+        <Header />
+        <main className='mx-auto w-full max-w-7xl flex-1 px-4 sm:px-6 lg:px-8'>
+          {children}
+        </main>
+        <Footer />
         <Toaster richColors />
         <Analytics />
       </body>

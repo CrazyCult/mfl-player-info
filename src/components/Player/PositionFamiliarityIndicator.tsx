@@ -1,6 +1,5 @@
 import { positionalFamiliarity } from '@/config';
 import { Player } from '@/types/global.types';
-import { Badge } from '../UI/badge';
 
 export function PositionFamiliarityIndicator({
   positions,
@@ -11,7 +10,9 @@ export function PositionFamiliarityIndicator({
 }) {
   if (positions.includes(player.metadata.positions[0])) {
     return (
-      <Badge className='rounded-sm px-1.5 text-[10px]/2.5 font-medium'>P</Badge>
+      <span className='inline-flex items-center justify-center rounded-sm bg-indigo-600 px-2 py-1 text-[10px] leading-none text-white'>
+        P
+      </span>
     );
   }
   if (
@@ -19,12 +20,9 @@ export function PositionFamiliarityIndicator({
     positions.includes(player.metadata.positions[2])
   ) {
     return (
-      <Badge
-        variant='secondary'
-        className='rounded-sm px-1.5 text-[10px]/2.5 font-medium'
-      >
+      <span className='inline-flex items-center justify-center rounded-sm bg-slate-300 px-2 py-1 text-[10px] leading-none text-slate-900'>
         S
-      </Badge>
+      </span>
     );
   }
   return null;
@@ -42,12 +40,12 @@ export function PositionalFamiliarityIndicator({
   );
   if (player.metadata.positions.slice(1).includes(position)) {
     return (
-      <Badge
+      <span
         title='Secondary'
-        className='rounded-sm bg-lime-700 px-1.5 text-[10px]/2.5 font-medium text-white'
+        className='inline-flex items-center justify-center rounded-sm bg-lime-700 px-2 py-1 text-[10px] leading-none text-white'
       >
         S
-      </Badge>
+      </span>
     );
   }
   if (
@@ -56,12 +54,12 @@ export function PositionalFamiliarityIndicator({
       -20
   ) {
     return (
-      <Badge
+      <span
         title='Unfamiliar'
-        className='rounded-sm bg-red-700 px-1 text-[10px]/2.5 font-medium text-white'
+        className='inline-flex items-center justify-center rounded-sm bg-red-700 px-2 py-1 text-[10px] leading-none text-white'
       >
         U
-      </Badge>
+      </span>
     );
   }
   if (
@@ -70,12 +68,12 @@ export function PositionalFamiliarityIndicator({
       -8
   ) {
     return (
-      <Badge
+      <span
         title='Somewhat Familiar'
-        className='rounded-sm bg-amber-700 px-1 text-[10px]/2.5 font-medium text-white'
+        className='inline-flex items-center justify-center rounded-sm bg-amber-600 px-2 py-1 text-[10px] leading-none text-white'
       >
         SF
-      </Badge>
+      </span>
     );
   }
   if (
@@ -84,12 +82,12 @@ export function PositionalFamiliarityIndicator({
       -5
   ) {
     return (
-      <Badge
+      <span
         title='Fairly Familiar'
-        className='rounded-sm bg-yellow-500 px-1 text-[10px]/2.5 font-medium text-white'
+        className='inline-flex items-center justify-center rounded-sm bg-yellow-500 px-2 py-1 text-[10px] leading-none text-white'
       >
         FF
-      </Badge>
+      </span>
     );
   }
   if (
@@ -98,12 +96,12 @@ export function PositionalFamiliarityIndicator({
       0
   ) {
     return (
-      <Badge
+      <span
         title='Primary'
-        className='rounded-sm bg-green-700 px-1 text-[10px]/2.5 font-medium text-white'
+        className='inline-flex items-center justify-center rounded-sm bg-green-700 px-2 py-1 text-[10px] leading-none text-white'
       >
         P
-      </Badge>
+      </span>
     );
   }
   return null;

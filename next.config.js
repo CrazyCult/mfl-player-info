@@ -1,15 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    ppr: 'incremental',
+  },
   logging: {
     fetches: {
       fullUrl: true,
     },
   },
   images: {
-    remotePatterns: [
-      new URL('https://d13e14gtps4iwl.cloudfront.net/**'),
-      new URL('https://app.playmfl.com/**'),
-    ],
+    domains: ['d13e14gtps4iwl.cloudfront.net'],
     minimumCacheTTL: 2592000,
   },
 };

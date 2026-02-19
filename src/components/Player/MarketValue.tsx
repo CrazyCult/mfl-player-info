@@ -55,6 +55,10 @@ export async function MarketValue({ player }: MarketValueProps) {
           <ConfidenceBadge confidence={marketValue.confidence} />
           <span className='font-medium'>~${marketValue.estimatedValue}</span>
         </div>
+        <div className='mt-1 text-xs text-gray-500'>
+          Range: ${marketValue.priceRange.low}-$
+          {marketValue.priceRange.high}
+        </div>
       </div>
     );
   } catch (error) {
@@ -77,7 +81,7 @@ export async function getMarketValueTooltip(player: Player): Promise<string> {
       return 'No recent sales data available for market value calculation.';
     }
 
-    return `${getMethodDescription(marketValue.method)} from ${marketValue.basedOn} sales. ${getConfidenceDescription(marketValue.confidence)}.`;
+    return `${getMethodDescription(marketValue.method)} from ${marketValue.basedOn}. ${getConfidenceDescription(marketValue.confidence)}.`;
   } catch (error) {
     return 'Unable to calculate market value at this time.';
   }
