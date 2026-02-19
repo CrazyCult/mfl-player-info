@@ -29,7 +29,7 @@ export function ShareCardButton({ playerId }: { playerId: number }) {
       variant="outline"
       size="sm"
       disabled={loading}
-      title="Copier la fiche en PNG"
+      title="Copy player card as PNG"
     >
       {copied ? (
         <CheckIcon className="h-4 w-4 text-green-500" />
