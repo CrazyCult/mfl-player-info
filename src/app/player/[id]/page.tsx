@@ -50,3 +50,4 @@ export default async function PlayerPage({ params }: Props) {
 
   return <Player player={player} />;
 }
+

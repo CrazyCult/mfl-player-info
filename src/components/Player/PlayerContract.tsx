@@ -38,3 +38,4 @@ export async function PlayerContract({ player }: { player: Player }) {
     </Link>
   );
 }
+

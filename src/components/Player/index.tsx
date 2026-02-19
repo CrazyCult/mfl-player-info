@@ -43,3 +43,5 @@ export default function Player({ player }: { player: Player }) {
     </div>
   );
 }
+
+

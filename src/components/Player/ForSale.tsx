@@ -23,3 +23,4 @@ export async function ForSale({ player }: { player: Player }) {
     </Link>
   );
 }
+

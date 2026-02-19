@@ -15,3 +15,4 @@ export function GoalkeeperStats({ player }: { player: Player }) {
     </div>
   );
 }
+

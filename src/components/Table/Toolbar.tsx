@@ -194,3 +194,4 @@ export function Toolbar({ table }: { table: Table<PlayerWithPositionRatings> }) 
     </>
   );
 }
+

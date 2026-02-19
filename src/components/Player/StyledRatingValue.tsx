@@ -11,3 +11,4 @@ export function StyledRatingValue({ rating }: { rating: number }) {
     </div>
   );
 }
+

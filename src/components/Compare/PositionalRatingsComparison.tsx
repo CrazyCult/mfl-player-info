@@ -71,3 +71,4 @@ export function PositionalRatingsComparison({
     </div>
   );
 }
+

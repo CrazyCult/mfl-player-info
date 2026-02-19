@@ -117,3 +117,4 @@ function ConfidenceBadge({
     </span>
   );
 }
+

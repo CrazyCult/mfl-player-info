@@ -205,3 +205,4 @@ export async function CareerStats({ player }: { player: Player }) {
     </div>
   );
 }
+
