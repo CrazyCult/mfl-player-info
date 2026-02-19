@@ -36,7 +36,7 @@ export function ShareCardButton({ playerId }: { playerId: number }) {
       ) : (
         <ClipboardIcon className="h-4 w-4" />
       )}
-      {copied ? "Copie !" : loading ? "..." : "Copier fiche"}
+
     </Button>
   );
 }
