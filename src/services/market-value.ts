@@ -39,6 +39,9 @@ export interface MarketValueResult {
     details: string;
   };
 
+  // Raw sales data for tooltip
+  sales?: { price: number; date: number; age?: number; overall?: number }[];
+
   // Detailed breakdown (for debugging/advanced users)
   breakdown: {
     salesData?: {
@@ -219,6 +222,12 @@ async function calculateWithEMA(
             : 'Lower confidence due to limited or older sales data.'
       }`,
     basedOn: `${marketData.sampleSize} sales over last ${Math.ceil(emaResult.oldestSale)} days (${marketData.searchCriteria})`,
+    sales: marketData.sales.map(s => ({
+      price: s.price,
+      date: s.purchaseDateTime || 0,
+      age: s.player?.metadata?.age,
+      overall: s.player?.metadata?.overall,
+    })),
     breakdown: {
       salesData: {
         ema: emaResult,
@@ -271,6 +280,12 @@ async function calculateWithStatistics(
       `Based on ${statisticalResult.average.method} of ${marketData.sampleSize} sales. ` +
       `Limited data available, so estimate has higher uncertainty.`,
     basedOn: `${marketData.sampleSize} sales (${marketData.searchCriteria})`,
+    sales: marketData.sales.map(s => ({
+      price: s.price,
+      date: s.purchaseDateTime || 0,
+      age: s.player?.metadata?.age,
+      overall: s.player?.metadata?.overall,
+    })),
     breakdown: {
       salesData: {
         statistical: statisticalResult,

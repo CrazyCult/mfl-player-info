@@ -90,11 +90,17 @@ export const getEnhancedMarketData = async (
       searchAttempt++;
     }
 
-    // Sort by purchase date (most recent first) and limit results
-    const sortedSales = sales
+    // Sort by purchase date (most recent first)
+    const rawSales = sales
       .filter(sale => sale.purchaseDateTime)
-      .sort((a, b) => (b.purchaseDateTime || 0) - (a.purchaseDateTime || 0))
-      .slice(0, maxResults);
+      .sort((a, b) => (b.purchaseDateTime || 0) - (a.purchaseDateTime || 0));
+
+    // Exclure les outliers >50% de la mediane
+    const prices = rawSales.map(s => s.price).sort((a, b) => a - b);
+    const median = prices.length > 0 ? prices[Math.floor(prices.length / 2)] : 0;
+    const sortedSales = median > 0
+      ? rawSales.filter(s => Math.abs(s.price - median) / median <= 0.5)
+      : rawSales;
 
     const searchCriteria = `±${searchAttempt} age/overall, ${player.metadata.positions[0]}`;
     const minPrice = getMinimumPriceThreshold(player.metadata.overall);
