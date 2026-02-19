@@ -12,7 +12,7 @@ export async function GET(request: Request) {
   const player = await getPlayerById(Number(id));
   if (!player) return new Response("Player not found", { status: 404 });
 
-  const { firstName, lastName, overall, positions, pace, shooting, passing, dribbling, defense, physical, age, height, foot } = player.metadata;
+  const { firstName, lastName, overall, positions, pace, shooting, passing, dribbling, defense, physical, age, height } = player.metadata;
   const pos = positions[0];
 
   const statColor = (v: number) => v >= 85 ? "#16a34a" : v >= 70 ? "#ca8a04" : v >= 55 ? "#ea580c" : "#6b7280";
@@ -77,7 +77,7 @@ export async function GET(request: Request) {
             </div>
             <span style={{ fontSize: "22px", fontWeight: 800, color: "#0f172a", marginTop: "4px" }}>{firstName} {lastName}</span>
             <div style={{ display: "flex", flexDirection: "column", marginTop: "8px", gap: "4px" }}>
-              {[["AGE", age + " yrs"], ["HEIGHT", (height || "-") + " cm"], ["FOOT", foot || "-"], ["POSITION", positions.join(" / ")]].map(([k, v]) => (
+              {[["AGE", age + " yrs"], ["HEIGHT", (height || "-") + " cm"],  ["POSITION", positions.join(" / ")]].map(([k, v]) => (
                 <div key={k} style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid #f1f5f9", paddingBottom: "3px" }}>
                   <span style={{ fontSize: "11px", fontWeight: 700, color: "#94a3b8", letterSpacing: "0.05em" }}>{k}</span>
                   <span style={{ fontSize: "11px", fontWeight: 600, color: "#0f172a" }}>{v}</span>
