@@ -15,8 +15,13 @@ export function ShareCardButton({ targetId }: { targetId: string }) {
     try {
       const canvas = await html2canvas(element, {
         useCORS: true,
-        backgroundColor: null,
+        backgroundColor: "#ffffff",
         scale: 2,
+        logging: false,
+        onclone: (doc) => {
+          const el = doc.getElementById(targetId);
+          if (el) el.style.colorScheme = "light";
+        },
       });
       canvas.toBlob(async (blob) => {
         if (!blob) return;
@@ -28,6 +33,7 @@ export function ShareCardButton({ targetId }: { targetId: string }) {
       }, "image/png");
     } catch (e) {
       console.error(e);
+      alert("Erreur: " + e);
     }
     setLoading(false);
   }, [targetId]);
