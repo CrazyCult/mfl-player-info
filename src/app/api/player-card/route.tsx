@@ -122,7 +122,7 @@ export async function GET(request: Request) {
             </div>
             <span style={{ fontSize: "22px", fontWeight: 800, color: "#0f172a", marginTop: "6px", lineHeight: 1.1 }}>{firstName} {lastName}</span>
             <div style={{ display: "flex", flexDirection: "column", marginTop: "10px", gap: "5px" }}>
-              {[["AGE", age + " yrs" + (retirementYears === 1 ? " RETIRING" : retirementYears === 2 ? " PRE-RETIRE" : retirementYears === 3 ? " LATE CAREER" : "")], ["HEIGHT", (height || "-") + " cm"], ["FOOT", preferredFoot || "-"], ["POSITION", positions.join(" / ")]].map(([k, v]) => (
+              {[["HEIGHT", (height || "-") + " cm"], ["FOOT", preferredFoot || "-"], ["POSITION", positions.join(" / ")]].map(([k, v]) => (
                 <div key={k} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "2px solid #cbd5e1", paddingBottom: "4px" }}>
                   <span style={{ fontSize: "12px", fontWeight: 700, color: "#475569", letterSpacing: "0.08em" }}>{k}</span>
                   <span style={{ fontSize: "13px", fontWeight: 700, color: "#0f172a" }}>{v}</span>

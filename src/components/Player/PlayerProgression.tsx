@@ -52,7 +52,7 @@ export function PlayerProgression({ player }: { player: Player }) {
   const maxOvr = data ? Math.max(...data.map(d => d.overall)) + 3 : 0;
   const minAge = data ? data[0].age : 0;
   const maxAge = data ? data[data.length - 1].age : 0;
-  const W = 500, H = 120, PAD = 8;
+  const W = 500, H = 110, PAD = 16;
 
   function toX(age: number) {
     return PAD + ((age - minAge) / Math.max(maxAge - minAge, 1)) * (W - PAD * 2);
@@ -81,7 +81,7 @@ export function PlayerProgression({ player }: { player: Player }) {
               <SpinnerIcon className='text-muted size-6 animate-spin' />
             </div>
           ) : data && data.length > 1 ? (
-            <div className='border-border rounded-lg border p-4'>
+            <div className='border-border rounded-lg border p-6'>
               <svg viewBox={`0 0 ${W} ${H}`} className='w-full' style={{ height: '160px' }}>
                 <defs>
                   <linearGradient id='progGrad' x1='0' y1='0' x2='0' y2='1'>
@@ -92,7 +92,7 @@ export function PlayerProgression({ player }: { player: Player }) {
                 {/* Grid lines */}
                 {[minOvr, Math.round((minOvr + maxOvr) / 2), maxOvr].map(v => (
                   <g key={v}>
-                    <line x1={PAD} y1={toY(v)} x2={W - PAD} y2={toY(v)} stroke='currentColor' strokeOpacity='0.1' strokeWidth='1' className='text-foreground' />
+                    <line x1={PAD} y1={toY(v)} x2={W - PAD} y2={toY(v)} stroke='currentColor' strokeOpacity='0.25' strokeWidth='1' className='text-foreground' />
                     <text x={PAD} y={toY(v) - 3} fontSize='9' fill='currentColor' opacity='0.4' className='text-foreground'>{v}</text>
                   </g>
                 ))}
@@ -104,7 +104,7 @@ export function PlayerProgression({ player }: { player: Player }) {
                 {data.map((d, i) => (
                   <g key={i}>
                     <circle cx={toX(d.age)} cy={toY(d.overall)} r='3' fill='currentColor' className='text-primary' />
-                    <text x={toX(d.age)} y={H - 1} fontSize='9' fill='currentColor' opacity='0.5' textAnchor='middle' className='text-foreground'>{d.age}</text>
+                    <text x={toX(d.age)} y={H + 10} fontSize='9' fill='currentColor' opacity='0.6' textAnchor='middle' className='text-foreground'>{d.age}</text>
                   </g>
                 ))}
               </svg>
