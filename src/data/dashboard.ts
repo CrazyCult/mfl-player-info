@@ -4,6 +4,13 @@ import { fetchAllPlayerSales } from '@/lib/pagination';
 import { Listing } from '@/types/global.types';
 import { cache } from 'react';
 
+function hasSupabaseEnv() {
+  return Boolean(
+    process.env.NEXT_PUBLIC_SUPABASE_URL &&
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  );
+}
+
 export interface TotalPlayersData {
   success: boolean;
   totalPlayers: number;
@@ -24,6 +31,10 @@ export interface TotalSalesVolumeData {
 
 export const getTotalPlayers = cache(
   async (): Promise<TotalPlayersData | { success: false }> => {
+    if (!hasSupabaseEnv()) {
+      return { success: false };
+    }
+
     const supabase = await createClient();
 
     // Initialize fallback values
@@ -59,6 +70,10 @@ export const getTotalPlayers = cache(
 
 export const getContractedPlayers = cache(
   async (): Promise<ContractedPlayersData | { success: false }> => {
+    if (!hasSupabaseEnv()) {
+      return { success: false };
+    }
+
     const supabase = await createClient();
 
     // Initialize fallback values
@@ -93,6 +108,10 @@ export const getContractedPlayers = cache(
 
 export const getTotalSalesCount = cache(
   async (): Promise<TotalSalesCountData | { success: false }> => {
+    if (!hasSupabaseEnv()) {
+      return { success: false };
+    }
+
     const supabase = await createClient();
 
     // Initialize fallback values
@@ -128,6 +147,10 @@ export const getTotalSalesCount = cache(
 
 export const getTotalSalesVolume = cache(
   async (): Promise<TotalSalesVolumeData | { success: false }> => {
+    if (!hasSupabaseEnv()) {
+      return { success: false };
+    }
+
     const supabase = await createClient();
 
     // Initialize fallback values
@@ -201,6 +224,10 @@ export interface TopPlayer {
 
 export const getTopRatedPlayers = cache(
   async (limit: number = 5): Promise<TopPlayer[]> => {
+    if (!hasSupabaseEnv()) {
+      return [];
+    }
+
     const supabase = await createClient();
 
     const { data, error } = await supabase
@@ -229,6 +256,10 @@ export interface TopOwner {
 
 export const getTopOwners = cache(
   async (limit: number = 5): Promise<TopOwner[]> => {
+    if (!hasSupabaseEnv()) {
+      return [];
+    }
+
     const supabase = await createClient();
 
     try {
@@ -262,6 +293,10 @@ export interface FavoritePlayer extends TopPlayer {
 export async function getFavoritePlayers(
   limit: number = 5
 ): Promise<FavoritePlayer[]> {
+  if (!hasSupabaseEnv()) {
+    return [];
+  }
+
   const supabase = await createClient();
 
   const { data, error } = await supabase
