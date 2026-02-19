@@ -115,8 +115,8 @@ export async function GET(request: Request) {
             <div style={{ display: "flex", flexDirection: "column", marginTop: "10px", gap: "5px" }}>
               {[["AGE", age + " yrs"], ["HEIGHT", (height || "-") + " cm"], ["POSITION", positions.join(" / ")]].map(([k, v]) => (
                 <div key={k} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #e2e8f0", paddingBottom: "4px" }}>
-                  <span style={{ fontSize: "10px", fontWeight: 700, color: "#94a3b8", letterSpacing: "0.08em" }}>{k}</span>
-                  <span style={{ fontSize: "11px", fontWeight: 600, color: "#334155" }}>{v}</span>
+                  <span style={{ fontSize: "12px", fontWeight: 700, color: "#475569", letterSpacing: "0.08em" }}>{k}</span>
+                  <span style={{ fontSize: "13px", fontWeight: 700, color: "#0f172a" }}>{v}</span>
                 </div>
               ))}
             </div>
@@ -166,8 +166,8 @@ export async function GET(request: Request) {
 
         {/* FOOTER */}
         <div style={{ marginTop: "14px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <span style={{ fontSize: "10px", color: "#cbd5e1", letterSpacing: "0.05em" }}>MFL PLAYER INFO</span>
-          <span style={{ fontSize: "10px", color: "#cbd5e1" }}>mflplayer.info/player/{id}</span>
+          <span style={{ fontSize: "11px", color: "#94a3b8", letterSpacing: "0.05em" }}>MFL PLAYER INFO</span>
+          <span style={{ fontSize: "11px", color: "#94a3b8" }}>mflplayer.info/player/{id}</span>
         </div>
       </div>
     ),
