@@ -1,4 +1,7 @@
-import { ImageResponse } from "next/og";
+﻿import os
+os.makedirs("src/app/api/player-card", exist_ok=True)
+f = open("src/app/api/player-card/route.tsx", "w", encoding="utf-8")
+f.write("""import { ImageResponse } from "next/og";
 import { getPlayerById } from "@/data/players";
 import { positionalFamiliarity } from "@/config";
 
@@ -146,3 +149,6 @@ export async function GET(request: Request) {
     { width: 600, height: 700 }
   );
 }
+""")
+f.close()
+print("OK")
