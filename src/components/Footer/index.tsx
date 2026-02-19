@@ -47,8 +47,8 @@ export function Footer() {
         >
           @AliColeman170
         </Link>
-        {' '}&middot;{' '}Motherforked by{' '}
-        <a href='https://github.com/CrazyCult' target='_blank' className='text-muted-foreground/80 hover:text-muted-foreground/70'>CrazyCult</a>
+        {' '}&middot;{' '}Forked by{' '}
+        <a href='https://discord.com/users/219439055107129354' target='_blank' className='text-muted-foreground/80 hover:text-muted-foreground/70'>CrazyCult</a>
       </p>
     </footer>
   );
