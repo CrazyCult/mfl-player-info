@@ -15,7 +15,7 @@ export function ImageCard({ player }: { player: Player }) {
     <div className='@container/image mx-auto w-full max-w-xs @sm:mx-0'>
       <Image
         className='mx-auto -mt-2 w-full max-w-[200px] px-2 @sm:max-w-none'
-        src={`https://d13e14gtps4iwl.cloudfront.net/players/${player.id}/card_512.png`}
+        src={`https://d13e14gtps4iwl.cloudfront.net/players/v2/${player.id}/card.png`}
         alt={`Player ${player.id} - ${player.metadata.firstName} ${player.metadata.lastName}`}
         width='512'
         height='748'
