@@ -34,7 +34,7 @@ export function PlayerStatsTable({
       })}
       {Object.entries(stats).map(([key, val]) => {
         if (key === 'goalkeeping') return null;
-        const diff = val - player.metadata[key as StatKey];
+        const diff = val - (player.metadata[key as StatKey] ?? 0);
         return (
           <div
             key={`${key}-${val}`}
