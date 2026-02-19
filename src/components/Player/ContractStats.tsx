@@ -40,7 +40,7 @@ export function ContractStats({ player }: { player: Player }) {
     setLoading(true);
     try {
       const res = await fetch(
-        `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players?limit=200&ageMin=${player.metadata.age - 1}&ageMax=${player.metadata.age + 1}&overallMin=${player.metadata.overall - 1}&overallMax=${player.metadata.overall + 1}&positions=${player.metadata.positions[0]}&excludingMflOwned=true&isFreeAgent=false`
+        `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players?limit=500&ageMin=${player.metadata.age - 2}&ageMax=${player.metadata.age + 2}&overallMin=${player.metadata.overall - 2}&overallMax=${player.metadata.overall + 2}&positions=${player.metadata.positions[0]}&excludingMflOwned=true&isFreeAgent=false`
       );
       const players: Player[] = await res.json();
       const filtered = players.filter(p => p.activeContract?.revenueShare !== 0);
