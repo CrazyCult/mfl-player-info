@@ -10,7 +10,18 @@ export async function BasicInfo({ player }: { player: Player }) {
     player.metadata;
   const fullName = `${firstName} ${lastName}`;
   const metadata = {
-    age,
+    age: retirementYears ? (
+          <span className='flex items-center justify-end gap-2'>
+            <span>{age}</span>
+            <span className={`inline-flex items-center rounded px-1.5 py-0.5 text-xs font-bold ${
+              retirementYears === 1 ? 'bg-red-500 text-white' :
+              retirementYears === 2 ? 'bg-orange-400 text-white' :
+              'bg-yellow-400 text-yellow-900'
+            }`}>
+              {retirementYears === 1 ? 'RETIRING' : retirementYears === 2 ? 'PRE-RETIRE' : 'LATE CAREER'}
+            </span>
+          </span>
+        ) : age,
     height: `${height}cm`,
     foot: preferredFoot.toLowerCase(),
     position: positions.join(' / '),

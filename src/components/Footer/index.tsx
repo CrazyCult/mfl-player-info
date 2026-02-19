@@ -39,9 +39,7 @@ export function Footer() {
         </Link>
       </div>
       <p className='text-muted-foreground mt-2 text-sm'>
-        Motherforked by{' '}
-        <a href='https://github.com/CrazyCult' target='_blank' className='text-muted-foreground/80 hover:text-muted-foreground/70'>CrazyCult</a>
-        {' '}&middot;{' '}Built by{' '}
+        Built by{' '}
         <Link
           href='https://twitter.com/alicoleman170'
           target='_blank'
@@ -49,6 +47,8 @@ export function Footer() {
         >
           @AliColeman170
         </Link>
+        {' '}&middot;{' '}Motherforked by{' '}
+        <a href='https://github.com/CrazyCult' target='_blank' className='text-muted-foreground/80 hover:text-muted-foreground/70'>CrazyCult</a>
       </p>
     </footer>
   );
