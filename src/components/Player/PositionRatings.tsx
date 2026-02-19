@@ -78,7 +78,7 @@ export function PositionRatings({ player }: { player: Player }) {
   }
 
   function plusStatValue(stat: StatKey) {
-    if (stats[stat] < 99) {
+    if ((stats[stat] ?? 0) < 99) {
       setStats({
         ...stats,
         [stat]: +stats[stat] + 1,
@@ -86,7 +86,7 @@ export function PositionRatings({ player }: { player: Player }) {
     }
   }
   function minusStatValue(stat: StatKey) {
-    if (stats[stat] > 0 && stats[stat] > defaultPlayerStats[stat]) {
+    if ((stats[stat] ?? 0) > 0 && (stats[stat] ?? 0) > (defaultPlayerStats[stat] ?? 0)) {
       setStats({
         ...stats,
         [stat]: +stats[stat] - 1,
