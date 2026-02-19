@@ -58,8 +58,8 @@ export async function MarketValue({ player }: MarketValueProps) {
             {marketValue.sales && marketValue.sales.length > 0 && (
               <div className='absolute bottom-6 right-0 z-10 w-72 scale-0 rounded-lg bg-white p-3 shadow-xl ring-1 ring-gray-200 transition-all group-hover:scale-100 dark:bg-gray-900 dark:ring-gray-700'>
                 <p className='text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide'>Recent Sales ({marketValue.sales.length})</p>
-                <div className='flex flex-col gap-1 max-h-48 overflow-y-auto'>
-                  {marketValue.sales.slice(0, 15).map((s, i) => (
+                <div className='flex flex-col gap-1'>
+                  {marketValue.sales.slice(0, 12).map((s, i) => (
                     <div key={i} className='flex justify-between text-xs'>
                       <span className='text-gray-400'>{new Date(s.date).toLocaleDateString()} {s.age ? ` ${s.age}y` : ""} {s.overall ? ` OVR ${s.overall}` : ""}</span>
                       <span className='font-semibold text-gray-700 dark:text-gray-200'>${s.price}</span>
