@@ -131,7 +131,7 @@ export async function GET(request: Request) {
               padding: "10px 4px",
               borderRight: i < stats.length - 1 ? "1px solid #e2e8f0" : "none",
             }}>
-              <span style={{ fontSize: "10px", fontWeight: 700, color: "#94a3b8", letterSpacing: "0.06em" }}>{s.label}</span>
+              <span style={{ fontSize: "13px", fontWeight: 800, color: "#334155", letterSpacing: "0.06em" }}>{s.label}</span>
               <div style={{ marginTop: "6px", width: "40px", height: "40px", borderRadius: "8px", background: ratingBg(s.value), display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <span style={{ fontSize: "15px", fontWeight: 800, color: ratingFg(s.value) }}>{s.value}</span>
               </div>

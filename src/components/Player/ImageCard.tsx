@@ -9,6 +9,7 @@ import { ForSale } from './ForSale';
 import { PlayerContract } from './PlayerContract';
 import { Player } from '@/types/global.types';
 import { Button } from '../UI/Button';
+import { ShareCardButton } from './ShareCardButton';
 
 export function ImageCard({ player }: { player: Player }) {
   return (
@@ -42,6 +43,7 @@ export function ImageCard({ player }: { player: Player }) {
             <ArrowsRightLeftIcon className='h-4 w-4' />
           </Link>
         </Button>
+        <ShareCardButton playerId={player.id} />
         <Button asChild size='sm' variant='secondary'>
           <Link
             href={`https://app.playmfl.com/players/${player.id}`}
