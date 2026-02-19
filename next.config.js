@@ -1,8 +1,5 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    ppr: 'incremental',
-  },
   logging: {
     fetches: {
       fullUrl: true,
@@ -13,5 +10,4 @@ const nextConfig = {
     minimumCacheTTL: 2592000,
   },
 };
-
 module.exports = nextConfig;
