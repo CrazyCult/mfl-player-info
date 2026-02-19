@@ -7,12 +7,13 @@ import { Suspense } from 'react';
 import { SpinnerIcon } from '../SpinnerIcon';
 import { CareerStats } from './CareerStats';
 import type { Player } from '@/types/global.types';
+import { ShareCardButton } from './ShareCardButton';
 
 export default function Player({ player }: { player: Player }) {
   const isGoalkeeper = player.metadata.positions.includes('GK');
 
   return (
-    <div className='bg-card shadow-foreground/5 outline-border @container/main mx-auto w-full max-w-xl transform rounded-xl p-4 shadow-2xl outline-1 -outline-offset-1 sm:p-6 lg:p-8'>
+    <div id='player-share-card' className='bg-card shadow-foreground/5 outline-border @container/main mx-auto w-full max-w-xl transform rounded-xl p-4 shadow-2xl outline-1 -outline-offset-1 sm:p-6 lg:p-8'>
       <div className='grid grid-cols-1 gap-y-8 @sm/main:grid-cols-3 @sm/main:items-center @sm/main:gap-8'>
         <ImageCard player={player} />
         <BasicInfo player={player} />
@@ -39,6 +40,9 @@ export default function Player({ player }: { player: Player }) {
         }
       >
         <ContractStats player={player} />
+      <div className='mt-6 flex justify-end'>
+        <ShareCardButton targetId='player-share-card' />
+      </div>
       </Suspense>
     </div>
   );
