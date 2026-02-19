@@ -123,7 +123,7 @@ export async function GET(request: Request) {
             <span style={{ fontSize: "22px", fontWeight: 800, color: "#0f172a", marginTop: "6px", lineHeight: 1.1 }}>{firstName} {lastName}</span>
             <div style={{ display: "flex", flexDirection: "column", marginTop: "10px", gap: "5px" }}>
               {[["AGE", age + " yrs"], ["HEIGHT", (height || "-") + " cm"], ["FOOT", preferredFoot || "-"], ["POSITION", positions.join(" / ")]].map(([k, v]) => (
-                <div key={k} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #e2e8f0", paddingBottom: "4px" }}>
+                <div key={k} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "2px solid #cbd5e1", paddingBottom: "4px" }}>
                   <span style={{ fontSize: "12px", fontWeight: 700, color: "#475569", letterSpacing: "0.08em" }}>{k}</span>
                   <span style={{ fontSize: "13px", fontWeight: 700, color: "#0f172a" }}>{v}</span>
                 </div>
@@ -156,7 +156,7 @@ export async function GET(request: Request) {
               <div key={p} style={{
                 display: "flex", alignItems: "center", justifyContent: "space-between",
                 padding: "8px 14px",
-                borderBottom: i < posRatings.length - 1 ? "1px solid #e2e8f0" : "none",
+                borderBottom: i < posRatings.length - 1 ? "2px solid #cbd5e1" : "none",
               }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                   <span style={{ fontSize: "13px", fontWeight: 600, color: "#334155", width: "40px" }}>{p}</span>
