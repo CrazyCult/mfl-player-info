@@ -51,7 +51,7 @@ export async function GET(request: Request) {
   const player = await getPlayerById(Number(id));
   if (!player) return new Response("Player not found", { status: 404 });
 
-  const { firstName, lastName, overall, positions, pace, shooting, passing, dribbling, defense, physical, age, height } = player.metadata;
+  const { firstName, lastName, overall, positions, pace, shooting, passing, dribbling, defense, physical, age, height, preferredFoot } = player.metadata;
   const pos = positions[0];
 
   const stats = [
@@ -65,6 +65,15 @@ export async function GET(request: Request) {
 
   const familiarity = positionalFamiliarity.find(p => p.primaryPosition === pos);
   const allPositions = ["GK","CB","RB","LB","RWB","LWB","CDM","CM","CAM","RM","LM","RW","LW","CF","ST"];
+  // Trier: primaire, secondaire, FF(-5), SF(-8)
+  const sortOrder = (p: string) => {
+    if (positions[0] === p) return 0;
+    if (positions.slice(1).includes(p)) return 1;
+    const adj = familiarity?.adjustment[p as keyof typeof familiarity.adjustment];
+    if (adj === -5) return 2;
+    if (adj === -8) return 3;
+    return 99;
+  };
   const posRatings = allPositions
     .filter(p => {
       if (p === "GK" && !positions.includes("GK")) return false;
@@ -82,7 +91,7 @@ export async function GET(request: Request) {
       const rating = calcRating(player, p);
       const diff = rating - overall;
       return { pos: p, badge, badgeColor, rating, diff };
-    });
+    }).sort((a, b) => sortOrder(a.pos) - sortOrder(b.pos));
 
   return new ImageResponse(
     (
@@ -113,7 +122,7 @@ export async function GET(request: Request) {
             </div>
             <span style={{ fontSize: "22px", fontWeight: 800, color: "#0f172a", marginTop: "6px", lineHeight: 1.1 }}>{firstName} {lastName}</span>
             <div style={{ display: "flex", flexDirection: "column", marginTop: "10px", gap: "5px" }}>
-              {[["AGE", age + " yrs"], ["HEIGHT", (height || "-") + " cm"], ["POSITION", positions.join(" / ")]].map(([k, v]) => (
+              {[["AGE", age + " yrs"], ["HEIGHT", (height || "-") + " cm"], ["FOOT", preferredFoot || "-"], ["POSITION", positions.join(" / ")]].map(([k, v]) => (
                 <div key={k} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #e2e8f0", paddingBottom: "4px" }}>
                   <span style={{ fontSize: "12px", fontWeight: 700, color: "#475569", letterSpacing: "0.08em" }}>{k}</span>
                   <span style={{ fontSize: "13px", fontWeight: 700, color: "#0f172a" }}>{v}</span>
@@ -147,7 +156,7 @@ export async function GET(request: Request) {
               <div key={p} style={{
                 display: "flex", alignItems: "center", justifyContent: "space-between",
                 padding: "8px 14px",
-                borderBottom: i < posRatings.length - 1 ? "1px solid #f1f5f9" : "none",
+                borderBottom: i < posRatings.length - 1 ? "1px solid #e2e8f0" : "none",
               }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                   <span style={{ fontSize: "13px", fontWeight: 600, color: "#334155", width: "40px" }}>{p}</span>
@@ -171,6 +180,6 @@ export async function GET(request: Request) {
         </div>
       </div>
     ),
-    { width: 600, height: 720 }
+    { width: 600, height: 800 }
   );
 }
