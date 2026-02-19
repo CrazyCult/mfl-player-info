@@ -18,7 +18,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_SITE_URL!),
+  metadataBase: new URL(process.env.NEXT_SITE_URL ?? 'http://localhost:3000'),
   title: 'MFL Player Info | Ratings Calculator & Contract Details',
   description:
     'Calculate the overall rating and get contract data for any Metaverse Football League (MFL) player using their player ID.',
