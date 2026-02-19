@@ -1,7 +1,8 @@
-import { ClientComparePage } from '@/components/Compare/ClientComparePage';
+import { PlayerComparison } from '@/components/Compare/PlayerComparison';
+import { ComparePlayerSearch } from '@/components/Search/ComparePlayerSearch';
 import type { Metadata } from 'next';
 import { openGraph, twitter } from '../shared-meta';
-import { createClient } from '@/lib/supabase/server';
+import { Suspense } from 'react';
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -10,32 +11,28 @@ type Props = {
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const searchParams = await props.searchParams;
-  const player1Id = parseInt(searchParams.player1 as string) || 0;
-  const player2Id = parseInt(searchParams.player2 as string) || 0;
+  // read route params
+  const player1Id = searchParams.player1 || '';
+  const player2Id = searchParams.player2 || '';
 
-  let title = 'Player Comparison | MFL Player Info';
-  let url = `${process.env.NEXT_PUBLIC_SITE_URL}/compare`;
+  // fetch data
+  const player1 = await fetch(
+    `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players/${player1Id}`
+  ).then((res) => res.json());
 
-  if (player1Id && player2Id) {
-    // Get player names from database for metadata
-    const supabase = await createClient();
-    const { data: players } = await supabase
-      .from('players')
-      .select('id, first_name, last_name')
-      .in('id', [player1Id, player2Id]);
+  const player2 = await fetch(
+    `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players/${player2Id}`
+  ).then((res) => res.json());
 
-    if (players && players.length === 2) {
-      const player1 = players.find((p) => p.id === player1Id);
-      const player2 = players.find((p) => p.id === player2Id);
+  const player1Name = player1.player
+    ? `${player1.player.metadata.firstName} ${player1.player.metadata.lastName}`
+    : '???';
+  const player2Name = player2.player
+    ? `${player2.player.metadata.firstName} ${player2.player.metadata.lastName}`
+    : '???';
 
-      if (player1 && player2) {
-        const player1Name = `${player1.first_name} ${player1.last_name}`;
-        const player2Name = `${player2.first_name} ${player2.last_name}`;
-        title = `${player1Name} vs ${player2Name} | Player Comparison | MFL Player Info`;
-        url = `${process.env.NEXT_PUBLIC_SITE_URL}/compare?player1=${player1Id}&player2=${player2Id}`;
-      }
-    }
-  }
+  const title = `${player1Name} v ${player2Name} | Player Comparison | MFL Player Info`;
+  const url = `${process.env.NEXT_SITE_URL}/compare?player1=${player1Id}&player2=${player2Id}`;
 
   return {
     title,
@@ -46,42 +43,52 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
       ...openGraph,
       title,
       url,
-      ...(player1Id &&
-        player2Id && {
-          images: [
-            {
-              url: `${process.env.NEXT_PUBLIC_SITE_URL}/compare/og-image?player1=${player1Id}&player2=${player2Id}`,
-              width: 1200,
-              height: 630,
-              alt: title,
-            },
-          ],
-        }),
+      images: [
+        {
+          url: `${process.env.NEXT_SITE_URL}/compare/og-image?player1=${player1Id}&player2=${player2Id}`,
+          width: 1200,
+          height: 630,
+          alt: `${title}`,
+        },
+      ],
     },
     twitter: {
       ...twitter,
       title,
-      ...(player1Id &&
-        player2Id && {
-          images: [
-            {
-              url: `${process.env.NEXT_PUBLIC_SITE_URL}/compare/og-image?player1=${player1Id}&player2=${player2Id}`,
-              alt: title,
-              width: 1200,
-              height: 670,
-            },
-          ],
-        }),
+      images: [
+        {
+          url: `${process.env.NEXT_SITE_URL}/compare/og-image?player1=${player1Id}&player2=${player2Id}`,
+          alt: `${title}`,
+          width: 1200,
+          height: 670,
+        },
+      ],
     },
   };
 }
 
-import { Suspense } from 'react';
+export default async function ComparePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ player1: number; player2: number }>;
+}) {
+  const player1Id = (await searchParams).player1;
+  const player2Id = (await searchParams).player2;
 
-export default function ComparePage() {
   return (
-    <Suspense>
-      <ClientComparePage />
-    </Suspense>
+    <div className='flex h-full flex-1 flex-col items-center justify-start gap-y-4 md:gap-y-8'>
+      <ComparePlayerSearch
+        key={`player1=${player1Id}&player2=${player2Id}`}
+        player1={player1Id}
+        player2={player2Id}
+      />
+      <Suspense>
+        <PlayerComparison
+          key={`compare/player1=${player1Id}&player2=${player2Id}`}
+          player1Id={player1Id}
+          player2Id={player2Id}
+        />
+      </Suspense>
+    </div>
   );
 }

@@ -12,6 +12,7 @@ export interface NFTMetadata {
   overall: string;
   nationalities: string[];
   dribbling: string;
+  resistance: string;
   name: string;
   shooting: string;
   physical: string;
@@ -33,8 +34,14 @@ export interface Player {
   id: number;
   metadata: Metadata;
   season?: Season;
-  ownedBy?: OwnedBy;
+  ownedBy: OwnedBy;
   activeContract?: ActiveContract;
+  hasPreContract: boolean;
+  energy: number;
+  offerStatus: number;
+  offerMinDivision?: number;
+  offerMinRevenueShare?: number;
+  offerAutoAccept?: boolean;
 }
 
 export interface Metadata {
@@ -54,11 +61,14 @@ export interface Metadata {
   defense: number;
   physical: number;
   goalkeeping: number;
+  resistance: number;
 }
 
 export interface OwnedBy {
   walletAddress: string;
   name: string;
+  twitter: string;
+  lastActive?: number;
 }
 
 export interface ActiveContract {
@@ -68,13 +78,24 @@ export interface ActiveContract {
   revenueShare: number;
   totalRevenueShareLocked: number;
   club: Club;
+  startSeason: number;
+  nbSeasons: number;
+  autoRenewal: boolean;
+  createdDateTime: number;
+  clauses: string[];
 }
 
 export interface Club {
   id: number;
   name: string;
+  mainColor: string;
+  secondaryColor: string;
+  city: string;
   division: number;
+  logoVersion: string;
+  country: string;
   ownedBy?: OwnedBy;
+  squads: any[];
   type?: string;
 }
 
@@ -90,8 +111,6 @@ export interface Listing {
   player?: Player;
   sellerAddress: string;
   sellerName: string;
-  buyerAddress?: string;
-  buyerName?: string;
   purchaseDateTime?: number;
   createdDateTime: number;
 }
@@ -160,40 +179,6 @@ export interface PlayerStats {
 
 export type StatKey = keyof PlayerStats;
 
-// Search and API response types
-export interface SearchPlayerResult {
-  id: number;
-  first_name: string | null;
-  last_name: string | null;
-  overall: number | null;
-  primary_position: string | null;
-  secondary_positions: string[] | null;
-  nationality?: string | null;
-  club_id?: number | null;
-  club_name?: string | null;
-  club_type?: string | null;
-  owner_wallet_address?: string | null;
-  owner_name?: string | null;
-  age?: number | null;
-  // Stats (optional for search results)
-  pace?: number | null;
-  shooting?: number | null;
-  passing?: number | null;
-  dribbling?: number | null;
-  defense?: number | null;
-  physical?: number | null;
-  goalkeeping?: number | null;
-}
-
-export interface BaseAPIResponse {
-  success: boolean;
-  message: string;
-}
-
-export interface PlayerMutationResponse extends BaseAPIResponse {
-  player_id: number;
-}
-
 export interface MFLUser {
   walletAddress: string;
   name: string;
@@ -212,29 +197,6 @@ export interface PositionRating {
   difference: number;
 }
 
-export interface MarketValue {
-  estimate: number;
-  confidence: 'high' | 'medium' | 'low';
-  method: string;
-}
-
-export interface CurrentListing {
-  price: number;
-}
-
-export type PlayerWithFavouriteData = Player & {
+export type PlayerWithPositionRatings = Player & {
   position_ratings: PositionRating[];
-  is_favourite: boolean;
-  tags: string[];
-  marketValue?: MarketValue;
-  club?: Club;
-  lastSyncedAt?: string;
-  // Computed fields from database
-  bestPosition?: string;
-  bestOvr?: number;
-  ovrDifference?: number;
-  priceDifference?: number | null;
-  // Status fields
-  is_retired?: boolean;
-  is_burned?: boolean;
 };

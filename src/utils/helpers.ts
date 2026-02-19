@@ -3,9 +3,19 @@ import {
   captainBoost,
   positionalFamiliarity,
 } from '@/config';
-import { Player, PlayerStats } from '@/types/global.types';
+import { Player } from '@/types/global.types';
 import { ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+
+interface PlayerStats {
+  pace: number;
+  dribbling: number;
+  passing: number;
+  shooting: number;
+  defense: number;
+  physical: number;
+  goalkeeping: number;
+}
 
 export const positionOrderArray = [
   'GK',

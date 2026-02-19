@@ -3,7 +3,6 @@ import { SpinnerIcon } from '../SpinnerIcon';
 import { InformationCircleIcon } from '@heroicons/react/20/solid';
 import { MarketValue, getMarketValueTooltip } from './MarketValue';
 import Link from 'next/link';
-import { PlayerTags } from './PlayerTags';
 import { Player } from '@/types/global.types';
 
 export async function BasicInfo({ player }: { player: Player }) {
@@ -70,7 +69,6 @@ export async function BasicInfo({ player }: { player: Player }) {
             </Suspense>
           </dd>
         </div>
-        <PlayerTags player={player} />
       </dl>
     </div>
   );

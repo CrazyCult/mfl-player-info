@@ -1,3 +1,4 @@
+import { ComboSearch } from '@/components/Search/ComboSearch';
 import { notFound } from 'next/navigation';
 
 export default async function PlayerLayout({
@@ -13,6 +14,7 @@ export default async function PlayerLayout({
 
   return (
     <div className='flex h-full flex-1 flex-col items-center justify-start space-y-8'>
+      <ComboSearch key='search' id={parseInt(id)} autofocus={true} />
       {children}
     </div>
   );
