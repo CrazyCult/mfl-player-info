@@ -1,4 +1,6 @@
-import { ImageResponse } from "next/og";
+﻿import os
+f = open("src/app/api/player-card/route.tsx", "w", encoding="utf-8")
+f.write("""import { ImageResponse } from "next/og";
 import { getPlayerById } from "@/data/players";
 import { positionalFamiliarity, attributeWeighting } from "@/config";
 
@@ -21,26 +23,14 @@ function calcRating(player: any, targetPos: string): number {
     goalkeeping: +(player.metadata.goalkeeping || 0) + adj,
   };
   return Math.round(
-    s.passing * weighting[0] + s.shooting * weighting[1] + s.defense * weighting[2] +
-    s.dribbling * weighting[3] + s.pace * weighting[4] + s.physical * weighting[5] + s.goalkeeping * weighting[6]
+    s.passing * weighting[0] +
+    s.shooting * weighting[1] +
+    s.defense * weighting[2] +
+    s.dribbling * weighting[3] +
+    s.pace * weighting[4] +
+    s.physical * weighting[5] +
+    s.goalkeeping * weighting[6]
   );
-}
-
-function ratingBg(r: number) {
-  if (r >= 95) return "#000000";
-  if (r >= 85) return "#a21caf";
-  if (r >= 75) return "#3b82f6";
-  if (r >= 65) return "#84cc16";
-  if (r >= 55) return "#facc15";
-  return "#e2e8f0";
-}
-function ratingFg(r: number) {
-  if (r >= 95) return "#facc15";
-  if (r >= 85) return "#fdf4ff";
-  if (r >= 75) return "#eff6ff";
-  if (r >= 65) return "#1a2e05";
-  if (r >= 55) return "#422006";
-  return "#1e293b";
 }
 
 export async function GET(request: Request) {
@@ -53,6 +43,8 @@ export async function GET(request: Request) {
 
   const { firstName, lastName, overall, positions, pace, shooting, passing, dribbling, defense, physical, age, height } = player.metadata;
   const pos = positions[0];
+
+  const statColor = (v: number) => v >= 85 ? "#16a34a" : v >= 70 ? "#ca8a04" : v >= 55 ? "#ea580c" : "#6b7280";
 
   const stats = [
     { label: "PAC", value: pace },
@@ -88,18 +80,15 @@ export async function GET(request: Request) {
     (
       <div style={{
         width: "600px",
-        background: "#f8fafc",
+        background: "#ffffff",
         borderRadius: "12px",
         padding: "24px",
         display: "flex",
         flexDirection: "column",
         fontFamily: "sans-serif",
-        color: "#334155",
+        color: "#0f172a",
         border: "1px solid #e2e8f0",
-        boxShadow: "0 4px 24px #00000022",
       }}>
-
-        {/* TOP: image + infos */}
         <div style={{ display: "flex", gap: "20px", alignItems: "flex-start" }}>
           <img
             src={"https://d13e14gtps4iwl.cloudfront.net/players/v2/" + id + "/card.png"}
@@ -107,56 +96,54 @@ export async function GET(request: Request) {
             style={{ borderRadius: "8px", border: "1px solid #e2e8f0", flexShrink: 0 }}
           />
           <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-              <span style={{ fontSize: "40px", fontWeight: 900, color: "#0f172a", lineHeight: 1 }}>{overall}</span>
-              <span style={{ fontSize: "12px", fontWeight: 700, background: "#1e293b", color: "#fff", padding: "3px 10px", borderRadius: "4px", letterSpacing: "0.05em" }}>{pos}</span>
+            <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
+              <span style={{ fontSize: "36px", fontWeight: 900 }}>{overall}</span>
+              <span style={{ fontSize: "13px", fontWeight: 700, background: "#0f172a", color: "#fff", padding: "2px 8px", borderRadius: "4px" }}>{pos}</span>
             </div>
-            <span style={{ fontSize: "22px", fontWeight: 800, color: "#0f172a", marginTop: "6px", lineHeight: 1.1 }}>{firstName} {lastName}</span>
-            <div style={{ display: "flex", flexDirection: "column", marginTop: "10px", gap: "5px" }}>
+            <span style={{ fontSize: "22px", fontWeight: 800, marginTop: "4px" }}>{firstName} {lastName}</span>
+            <div style={{ display: "flex", flexDirection: "column", marginTop: "8px", gap: "4px" }}>
               {[["AGE", age + " yrs"], ["HEIGHT", (height || "-") + " cm"], ["POSITION", positions.join(" / ")]].map(([k, v]) => (
-                <div key={k} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #e2e8f0", paddingBottom: "4px" }}>
-                  <span style={{ fontSize: "10px", fontWeight: 700, color: "#94a3b8", letterSpacing: "0.08em" }}>{k}</span>
-                  <span style={{ fontSize: "11px", fontWeight: 600, color: "#334155" }}>{v}</span>
+                <div key={k} style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid #f1f5f9", paddingBottom: "3px" }}>
+                  <span style={{ fontSize: "11px", fontWeight: 700, color: "#94a3b8" }}>{k}</span>
+                  <span style={{ fontSize: "11px", fontWeight: 600 }}>{v}</span>
                 </div>
               ))}
             </div>
           </div>
         </div>
 
-        {/* STATS */}
-        <div style={{ display: "flex", marginTop: "16px", border: "1px solid #e2e8f0", borderRadius: "10px", overflow: "hidden", background: "#ffffff" }}>
+        <div style={{ display: "flex", marginTop: "16px", border: "1px solid #e2e8f0", borderRadius: "8px", overflow: "hidden" }}>
           {stats.map((s, i) => (
             <div key={s.label} style={{
               flex: 1, display: "flex", flexDirection: "column", alignItems: "center",
               padding: "10px 4px",
               borderRight: i < stats.length - 1 ? "1px solid #e2e8f0" : "none",
             }}>
-              <span style={{ fontSize: "10px", fontWeight: 700, color: "#94a3b8", letterSpacing: "0.06em" }}>{s.label}</span>
-              <div style={{ marginTop: "6px", width: "40px", height: "40px", borderRadius: "8px", background: ratingBg(s.value), display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <span style={{ fontSize: "15px", fontWeight: 800, color: ratingFg(s.value) }}>{s.value}</span>
+              <span style={{ fontSize: "10px", fontWeight: 700, color: "#94a3b8" }}>{s.label}</span>
+              <div style={{ marginTop: "6px", width: "36px", height: "36px", borderRadius: "6px", background: statColor(s.value), display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <span style={{ fontSize: "14px", fontWeight: 800, color: "#fff" }}>{s.value}</span>
               </div>
             </div>
           ))}
         </div>
 
-        {/* POSITION RATINGS */}
         <div style={{ marginTop: "16px", display: "flex", flexDirection: "column" }}>
-          <span style={{ fontSize: "14px", fontWeight: 700, color: "#0f172a", marginBottom: "8px" }}>Position Ratings</span>
-          <div style={{ display: "flex", flexDirection: "column", border: "1px solid #e2e8f0", borderRadius: "10px", overflow: "hidden", background: "#ffffff" }}>
+          <span style={{ fontSize: "13px", fontWeight: 700, marginBottom: "8px" }}>Position Ratings</span>
+          <div style={{ display: "flex", flexDirection: "column", border: "1px solid #e2e8f0", borderRadius: "8px", overflow: "hidden" }}>
             {posRatings.map(({ pos: p, badge, badgeColor, rating, diff }, i) => (
               <div key={p} style={{
                 display: "flex", alignItems: "center", justifyContent: "space-between",
-                padding: "8px 14px",
+                padding: "7px 12px",
                 borderBottom: i < posRatings.length - 1 ? "1px solid #f1f5f9" : "none",
               }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span style={{ fontSize: "13px", fontWeight: 600, color: "#334155", width: "40px" }}>{p}</span>
+                  <span style={{ fontSize: "13px", fontWeight: 600, width: "36px" }}>{p}</span>
                   <span style={{ fontSize: "10px", fontWeight: 700, background: badgeColor, color: "#fff", padding: "2px 6px", borderRadius: "3px" }}>{badge}</span>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                  <span style={{ fontSize: "12px", color: diff < 0 ? "#ef4444" : "#94a3b8", fontWeight: 600, width: "28px", textAlign: "right" }}>{diff === 0 ? "0" : diff}</span>
-                  <div style={{ width: "40px", height: "40px", borderRadius: "8px", background: ratingBg(rating), display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <span style={{ fontSize: "15px", fontWeight: 800, color: ratingFg(rating) }}>{rating}</span>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <span style={{ fontSize: "12px", color: diff < 0 ? "#ef4444" : "#94a3b8", fontWeight: 600 }}>{diff === 0 ? "0" : diff}</span>
+                  <div style={{ width: "36px", height: "36px", borderRadius: "6px", background: statColor(rating), display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ fontSize: "14px", fontWeight: 800, color: "#fff" }}>{rating}</span>
                   </div>
                 </div>
               </div>
@@ -164,13 +151,15 @@ export async function GET(request: Request) {
           </div>
         </div>
 
-        {/* FOOTER */}
-        <div style={{ marginTop: "14px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <span style={{ fontSize: "10px", color: "#cbd5e1", letterSpacing: "0.05em" }}>MFL PLAYER INFO</span>
+        <div style={{ marginTop: "12px", display: "flex", justifyContent: "space-between" }}>
+          <span style={{ fontSize: "10px", color: "#cbd5e1" }}>MFL PLAYER INFO</span>
           <span style={{ fontSize: "10px", color: "#cbd5e1" }}>mflplayer.info/player/{id}</span>
         </div>
       </div>
     ),
-    { width: 600, height: 720 }
+    { width: 600, height: 700 }
   );
 }
+""")
+f.close()
+print("OK")

@@ -1,4 +1,5 @@
-import { ImageResponse } from "next/og";
+﻿f = open("src/app/api/player-card/route.tsx", "w", encoding="utf-8")
+f.write("""import { ImageResponse } from "next/og";
 import { getPlayerById } from "@/data/players";
 import { positionalFamiliarity, attributeWeighting } from "@/config";
 
@@ -174,3 +175,6 @@ export async function GET(request: Request) {
     { width: 600, height: 720 }
   );
 }
+""")
+f.close()
+print("OK")
