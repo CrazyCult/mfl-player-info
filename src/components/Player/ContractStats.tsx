@@ -50,16 +50,20 @@ export function ContractStats({ player }: { player: Player }) {
         map.get(div).push(p);
         return map;
       }, new Map());
-      const sorted = new Map([...grouped.entries()].sort());
+      const divOrder = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+      const sorted = new Map([...grouped.entries()].sort((a, b) => divOrder.indexOf(a[0]) - divOrder.indexOf(b[0])));
       const info: any[] = [];
       sorted.forEach((contracts, division) => {
         const s = [...contracts].sort((a: Player, b: Player) => a.activeContract!.revenueShare - b.activeContract!.revenueShare);
+        const trim = Math.max(1, Math.floor(s.length * 0.1));
+        const trimmed = s.length >= 5 ? s.slice(trim, s.length - trim) : s;
+        const avg = trimmed.reduce((sum: number, c: Player) => sum + c.activeContract!.revenueShare, 0) / trimmed.length;
         info.push({
           division,
           total: contracts.length,
-          minRevenueShare: s[0].activeContract.revenueShare,
-          maxRevenueShare: s[s.length - 1].activeContract.revenueShare,
-          averageRevenueShare: contracts.reduce((sum: number, c: Player) => sum + c.activeContract!.revenueShare, 0) / contracts.length,
+          minRevenueShare: trimmed[0].activeContract.revenueShare,
+          maxRevenueShare: trimmed[trimmed.length - 1].activeContract.revenueShare,
+          averageRevenueShare: avg,
         });
       });
       setContractInfo(info);
