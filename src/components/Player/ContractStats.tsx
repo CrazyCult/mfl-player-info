@@ -50,7 +50,7 @@ export function ContractStats({ player }: { player: Player }) {
         map.get(div).push(p);
         return map;
       }, new Map());
-      const divOrder = [10, 9, 8, 7, 6, 5, 4, 3, 2, 1];
+      const divOrder = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
       const sorted = new Map([...grouped.entries()].sort((a, b) => divOrder.indexOf(a[0]) - divOrder.indexOf(b[0])));
       const info: any[] = [];
       sorted.forEach((contracts, division) => {
