@@ -27,7 +27,7 @@ export const getListingByPlayerId = async (id: number) => {
 
 export const getContactDataByPlayer = async (player: Player) => {
   const res = await fetch(
-    `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players?limit=400&ageMin=${
+    `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players?limit=100&ageMin=${
       player.metadata.age - 1
     }&ageMax=${player.metadata.age + 1}&overallMin=${
       player.metadata.overall - 1
