@@ -1,4 +1,4 @@
-"use client";
+content = '''"use client";
 import { useState, useCallback } from "react";
 import html2canvas from "html2canvas";
 import { ClipboardIcon, CheckIcon } from "@heroicons/react/24/outline";
@@ -49,3 +49,6 @@ export function ShareCardButton({ targetId }: { targetId: string }) {
     </Button>
   );
 }
+'''
+open("src/components/Player/ShareCardButton.tsx", "w", encoding="utf-8").write(content)
+print("OK")
