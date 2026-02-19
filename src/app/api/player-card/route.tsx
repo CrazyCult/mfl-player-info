@@ -176,7 +176,7 @@ export async function GET(request: Request) {
         {/* FOOTER */}
         <div style={{ marginTop: "14px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <span style={{ fontSize: "11px", color: "#94a3b8", letterSpacing: "0.05em" }}>MFL PLAYER INFO</span>
-          <span style={{ fontSize: "11px", color: "#94a3b8" }}>mflplayer.info/player/{id}</span>
+          <span style={{ fontSize: "11px", color: "#94a3b8" }}>mflplayerinfo.vercel.app/player/{id}</span>
         </div>
       </div>
     ),
