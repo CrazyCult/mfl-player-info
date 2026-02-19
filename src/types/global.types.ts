@@ -61,6 +61,7 @@ export interface Metadata {
   defense: number;
   physical: number;
   goalkeeping: number;
+  retirementYears?: number;
   resistance: number;
 }
 
@@ -175,6 +176,7 @@ export interface PlayerStats {
   defense: number;
   physical: number;
   goalkeeping: number;
+  retirementYears?: number;
 }
 
 export type StatKey = keyof PlayerStats;
