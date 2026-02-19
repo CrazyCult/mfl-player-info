@@ -127,7 +127,6 @@ export function SearchComboBox({
               <ComboboxOption
                 key={option.id}
                 value={option}
-                onMouseEnter={() => prefetch(option.id)}
                 className='group data-active:bg-accent data-active:text-accent-foreground relative cursor-default py-2 pr-9 pl-4 select-none focus:outline-hidden'
               >
                 {() => (
