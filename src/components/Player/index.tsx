@@ -40,7 +40,8 @@ export default function Player({ player }: { player: Player }) {
           </div>
         }
       >
-        <ContractStats player={player} />
+        <PlayerProgression player={player} />
+      <ContractStats player={player} />
 
       </Suspense>
     </div>
