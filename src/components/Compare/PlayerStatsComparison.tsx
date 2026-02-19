@@ -53,8 +53,8 @@ export async function PlayerStatsComparison({
             <div key={stat} className='grid grid-cols-3 gap-x-1.5 py-2'>
               <div className='flex items-center gap-x-1.5 sm:gap-x-3'>
                 <StyledRatingValue rating={player1Stats[stat as StatKey] ?? 0} />
-                {player1Stats[stat as StatKey] >
-                  player2Stats[stat as StatKey] && (
+                {(player1Stats[stat as StatKey] ?? 0) >
+                  (player2Stats[stat as StatKey] ?? 0) && (
                   <StarIcon className='size-4 text-yellow-400' />
                 )}
               </div>
@@ -62,8 +62,8 @@ export async function PlayerStatsComparison({
                 {stat}
               </span>
               <div className='flex items-center justify-end gap-x-3'>
-                {player2Stats[stat as StatKey] >
-                  player1Stats[stat as StatKey] && (
+                {(player2Stats[stat as StatKey] ?? 0) >
+                  (player1Stats[stat as StatKey] ?? 0) && (
                   <StarIcon className='size-4 text-yellow-400' />
                 )}
                 <StyledRatingValue rating={player2Stats[stat as StatKey] ?? 0} />
