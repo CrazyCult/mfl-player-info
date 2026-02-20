@@ -54,3 +54,26 @@ export const getCareerStatsByPlayer = async (player: Player) => {
   const careerStats = await res.json();
   return careerStats;
 };
+
+export const getProgressionByPlayer = async (id: number) => {
+  const res = await fetch(
+    `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players/${id}/experiences/history`,
+    {
+      cache: 'force-cache',
+      next: { tags: [`progression/${id}`], revalidate: 3600 },
+    }
+  );
+  return res.json();
+};
+
+export const getContractComparisonByPlayer = async (player: Player) => {
+  const res = await fetch(
+    `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players?limit=500&ageMin=${player.metadata.age - 2}&ageMax=${player.metadata.age + 2}&overallMin=${player.metadata.overall - 2}&overallMax=${player.metadata.overall + 2}&positions=${player.metadata.positions[0]}&excludingMflOwned=true&isFreeAgent=false`,
+    {
+      cache: 'force-cache',
+      next: { tags: [`contract-comparison/${player.id}`], revalidate: 3600 },
+    }
+  );
+  const players: Player[] = await res.json();
+  return players;
+};

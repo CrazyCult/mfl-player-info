@@ -4,6 +4,14 @@ import { Player } from '@/types/global.types';
 import { InformationCircleIcon, ChevronDownIcon } from '@heroicons/react/24/solid';
 import { SpinnerIcon } from '../SpinnerIcon';
 
+type ContractInfo = {
+  division: number;
+  total: number;
+  minRevenueShare: number;
+  maxRevenueShare: number;
+  averageRevenueShare: number;
+};
+
 function Division({ division }: { division: number }) {
   const divisionClasses: { [key: number]: string } = {
     1: 'bg-[#3be9f8]', 2: 'bg-[#13d389]', 3: 'bg-[#ffd23e]',
@@ -28,10 +36,10 @@ function formatPercentage(value: number) {
   }).format(value / 100 / 100);
 }
 
-export function ContractStats({ player }: { player: Player }) {
+export function ContractStats({ player, initialInfo }: { player: Player; initialInfo?: ContractInfo[] | null }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [contractInfo, setContractInfo] = useState<any[] | null>(null);
+  const [contractInfo, setContractInfo] = useState<ContractInfo[] | null>(initialInfo ?? null);
 
   async function handleOpen() {
     if (open) { setOpen(false); return; }
@@ -44,15 +52,15 @@ export function ContractStats({ player }: { player: Player }) {
       );
       const players: Player[] = await res.json();
       const filtered = players.filter(p => p.activeContract?.revenueShare !== 0);
-      const grouped = filtered.reduce((map, p) => {
+      const grouped = filtered.reduce((map: Map<number, Player[]>, p) => {
         const div = p.activeContract!.club.division;
         if (!map.has(div)) map.set(div, []);
-        map.get(div).push(p);
+        map.get(div)!.push(p);
         return map;
       }, new Map());
       const divOrder = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
       const sorted = new Map([...grouped.entries()].sort((a, b) => divOrder.indexOf(a[0]) - divOrder.indexOf(b[0])));
-      const info: any[] = [];
+      const info: ContractInfo[] = [];
       sorted.forEach((contracts, division) => {
         const s = [...contracts].sort((a: Player, b: Player) => a.activeContract!.revenueShare - b.activeContract!.revenueShare);
         const trim = Math.max(1, Math.floor(s.length * 0.1));
@@ -61,8 +69,8 @@ export function ContractStats({ player }: { player: Player }) {
         info.push({
           division,
           total: contracts.length,
-          minRevenueShare: trimmed[0].activeContract.revenueShare,
-          maxRevenueShare: trimmed[trimmed.length - 1].activeContract.revenueShare,
+          minRevenueShare: trimmed[0].activeContract!.revenueShare,
+          maxRevenueShare: trimmed[trimmed.length - 1].activeContract!.revenueShare,
           averageRevenueShare: avg,
         });
       });

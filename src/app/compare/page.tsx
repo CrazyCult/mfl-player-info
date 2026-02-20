@@ -15,14 +15,17 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const player1Id = searchParams.player1 || '';
   const player2Id = searchParams.player2 || '';
 
-  // fetch data
-  const player1 = await fetch(
-    `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players/${player1Id}`
-  ).then((res) => res.json());
-
-  const player2 = await fetch(
-    `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players/${player2Id}`
-  ).then((res) => res.json());
+  // fetch data in parallel
+  const [player1, player2] = await Promise.all([
+    fetch(
+      `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players/${player1Id}`,
+      { cache: 'force-cache', next: { revalidate: 3600 } }
+    ).then((res) => res.json()),
+    fetch(
+      `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players/${player2Id}`,
+      { cache: 'force-cache', next: { revalidate: 3600 } }
+    ).then((res) => res.json()),
+  ]);
 
   const player1Name = player1.player
     ? `${player1.player.metadata.firstName} ${player1.player.metadata.lastName}`
