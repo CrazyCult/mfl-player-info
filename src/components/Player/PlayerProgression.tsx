@@ -11,10 +11,10 @@ type HistoryEntry = {
 
 type DataPoint = { age: number; overall: number };
 
-export function PlayerProgression({ player }: { player: Player }) {
+export function PlayerProgression({ player, initialData }: { player: Player; initialData?: DataPoint[] | null }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState<DataPoint[] | null>(null);
+  const [data, setData] = useState<DataPoint[] | null>(initialData ?? null);
 
   async function handleOpen() {
     if (open) { setOpen(false); return; }

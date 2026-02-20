@@ -26,7 +26,7 @@ export function SearchComboBox({
   autofocus?: boolean;
 }) {
   let [query, setQuery] = useState(id ? id.toString() : '');
-  let [debouncedQuery] = useDebounceValue(query, 800);
+  let [debouncedQuery] = useDebounceValue(query, 300);
   let [filteredOptions, setFilteredOptions] = useState<Player[] | null>(null);
   let [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   let [isSearching, setIsSearching] = useState<boolean>(false);
