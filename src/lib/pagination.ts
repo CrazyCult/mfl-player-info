@@ -1,12 +1,21 @@
+import 'server-only';
 import { Listing, Player } from '@/types/global.types';
+import { getMflHeaders, MFL_API_BASE_URL } from '@/lib/mfl-api';
 
-/**
- * Simple fetch wrapper for MFL API calls
- */
 async function simpleFetch<T>(url: string): Promise<T> {
   try {
-    const response = await fetch(url);
+    const response = await fetch(url, { headers: getMflHeaders() });
     if (!response.ok) {
+      if (response.status === 401 || response.status === 403) {
+        throw new Error(
+          `MFL API authentication failed (${response.status}): check MFL_API_TOKEN`
+        );
+      }
+      if (response.status === 429) {
+        throw new Error(
+          'MFL API rate limit exceeded (429): too many requests, slow down'
+        );
+      }
       throw new Error(`HTTP ${response.status}: ${response.statusText}`);
     }
     return await response.json();
@@ -17,25 +26,19 @@ async function simpleFetch<T>(url: string): Promise<T> {
 }
 
 
-/**
- * Configuration for pagination behavior
- */
 const PAGINATION_CONFIG = {
-  maxPages: 20, // Safety limit to prevent infinite loops
-  defaultLimit: 50, // MFL API max limit
+  maxPages: 20,
+  defaultLimit: 50,
   maxRetries: 3,
 } as const;
 
-/**
- * Generic pagination helper for MFL API endpoints
- */
 export async function fetchAllPages<T extends Record<string, any>>(
   baseEndpoint: string,
   params: Record<string, string | number | boolean> = {},
   options: {
     maxPages?: number;
     limit?: number;
-    idField?: string; // Field to use for pagination (e.g., 'beforePlayerId', 'beforeListingId')
+    idField?: string;
   } = {}
 ): Promise<T[]> {
   const {
@@ -50,21 +53,17 @@ export async function fetchAllPages<T extends Record<string, any>>(
 
   while (pageCount < maxPages) {
     try {
-      // Build query string
       const queryString = new URLSearchParams(
         Object.entries(currentParams).map(([key, value]) => [key, String(value)])
       ).toString();
-      
+
       const endpoint = `${baseEndpoint}${queryString ? `?${queryString}` : ''}`;
-      
+
       console.log(`Fetching page ${pageCount + 1} from: ${endpoint}`);
-      
-      // Fetch page
-      const baseUrl = 'https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod';
-      const fullUrl = `${baseUrl}${endpoint}`;
+
+      const fullUrl = `${MFL_API_BASE_URL}${endpoint}`;
       const results: T[] = await simpleFetch<T[]>(fullUrl);
 
-      // Handle empty response
       if (!results || results.length === 0) {
         console.log(`No more results found on page ${pageCount + 1}. Stopping pagination.`);
         break;
@@ -73,16 +72,13 @@ export async function fetchAllPages<T extends Record<string, any>>(
       allResults.push(...results);
       pageCount++;
 
-      // Check if we got fewer results than the limit (indicates last page)
       if (results.length < limit) {
         console.log(`Received ${results.length} results (less than limit ${limit}). Last page reached.`);
         break;
       }
 
-      // Set up pagination for next request using the last item's ID
       const lastItem = results[results.length - 1];
-      
-      // Determine which ID field to use based on the idField parameter
+
       let idValue: number | undefined;
       if (idField === 'beforeListingId' && 'listingResourceId' in lastItem) {
         idValue = lastItem.listingResourceId;
@@ -91,7 +87,7 @@ export async function fetchAllPages<T extends Record<string, any>>(
       } else if ('id' in lastItem) {
         idValue = lastItem.id;
       }
-      
+
       if (idValue) {
         (currentParams as any)[idField] = idValue;
       } else {
@@ -99,18 +95,16 @@ export async function fetchAllPages<T extends Record<string, any>>(
         break;
       }
 
-      // Small delay to be respectful to the API
       await new Promise(resolve => setTimeout(resolve, 100));
 
     } catch (error) {
       console.error(`Error fetching page ${pageCount + 1}:`, error);
-      
-      // If we have some results, return what we have
+
       if (allResults.length > 0) {
         console.warn(`Returning ${allResults.length} results despite pagination error.`);
         break;
       }
-      
+
       throw error;
     }
   }
@@ -123,9 +117,6 @@ export async function fetchAllPages<T extends Record<string, any>>(
   return allResults;
 }
 
-/**
- * Fetch all sales listings for a player with similar characteristics
- */
 export async function fetchAllPlayerSales(
   ageMin: number,
   ageMax: number,
@@ -162,11 +153,6 @@ export async function fetchAllPlayerSales(
   );
 }
 
-
-
-/**
- * Fetch recent sales feed for trend analysis
- */
 export async function fetchRecentSalesFeed(
   options: {
     maxPages?: number;
@@ -175,7 +161,6 @@ export async function fetchRecentSalesFeed(
 ): Promise<Listing[]> {
   const { maxPages = 20, daysBack = 30 } = options;
 
-  // Calculate timestamp for X days ago
   const cutoffDate = Date.now() - (daysBack * 24 * 60 * 60 * 1000);
 
   const allSales: Listing[] = [];
@@ -185,9 +170,9 @@ export async function fetchRecentSalesFeed(
   while (pageCount < maxPages) {
     try {
       const params: Record<string, string | number> = {
-        limit: 25, // Feed endpoint max limit
+        limit: 25,
       };
-      
+
       if (beforeListingId) {
         params.beforeListingId = beforeListingId;
       }
@@ -195,29 +180,25 @@ export async function fetchRecentSalesFeed(
       const queryString = new URLSearchParams(
         Object.entries(params).map(([key, value]) => [key, String(value)])
       ).toString();
-      
-      const baseUrl = 'https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod';
-      const fullUrl = `${baseUrl}/listings/feed?${queryString}`;
+
+      const fullUrl = `${MFL_API_BASE_URL}/listings/feed?${queryString}`;
       const results: Listing[] = await simpleFetch<Listing[]>(fullUrl);
 
       if (!results || results.length === 0) {
         break;
       }
 
-      // Filter out sales older than our cutoff
       const recentSales = results.filter(sale => {
         return sale.purchaseDateTime && sale.purchaseDateTime > cutoffDate;
       });
 
-      // If no recent sales in this batch, we've gone too far back
       if (recentSales.length === 0) {
         console.log(`No recent sales found in page ${pageCount + 1}. Stopping feed fetch.`);
         break;
       }
 
       allSales.push(...recentSales);
-      
-      // If we got fewer recent sales than total results, we're reaching the cutoff
+
       if (recentSales.length < results.length) {
         console.log(`Reached sales older than ${daysBack} days. Stopping feed fetch.`);
         break;

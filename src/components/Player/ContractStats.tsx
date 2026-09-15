@@ -47,9 +47,14 @@ export function ContractStats({ player, initialInfo }: { player: Player; initial
     if (contractInfo) return;
     setLoading(true);
     try {
-      const res = await fetch(
-        `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players?limit=500&ageMin=${player.metadata.age - 2}&ageMax=${player.metadata.age + 2}&overallMin=${player.metadata.overall - 2}&overallMax=${player.metadata.overall + 2}&positions=${player.metadata.positions[0]}&excludingMflOwned=true&isFreeAgent=false`
-      );
+      const params = new URLSearchParams({
+        ageMin: String(player.metadata.age - 2),
+        ageMax: String(player.metadata.age + 2),
+        overallMin: String(player.metadata.overall - 2),
+        overallMax: String(player.metadata.overall + 2),
+        position: player.metadata.positions[0],
+      });
+      const res = await fetch(`/api/players/contracts?${params}`);
       const players: Player[] = await res.json();
       const filtered = players.filter(p => p.activeContract?.revenueShare !== 0);
       const grouped = filtered.reduce((map: Map<number, Player[]>, p) => {
