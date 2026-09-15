@@ -17,7 +17,7 @@ export default async function Image({ params }: { params: { id: string } }) {
   const token = process.env.MFL_API_TOKEN;
   const player = await fetch(
     `https://api.playmfl.com/players/${params.id}`,
-    token ? { headers: { 'X-MFL-Token': token } } : {}
+    token ? { headers: { 'X-MFL-Api-Token': token } } : {}
   ).then((res) => res.json());
 
   const {
