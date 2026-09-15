@@ -13,7 +13,7 @@ export async function mflFetch(
   init: RequestInit = {}
 ): Promise<Response> {
   const { headers: existingHeaders, ...rest } = init;
-  return fetch(`${MFL_API_BASE_URL}${path}`, {
+  const res = await fetch(`${MFL_API_BASE_URL}${path}`, {
     ...rest,
     headers: {
       ...getMflHeaders(),
@@ -22,4 +22,8 @@ export async function mflFetch(
         : {}),
     },
   });
+  if (!res.ok) {
+    throw new Error(`MFL API ${res.status} on ${path}: check MFL_API_TOKEN is valid`);
+  }
+  return res;
 }
