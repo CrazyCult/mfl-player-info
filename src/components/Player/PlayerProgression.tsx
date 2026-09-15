@@ -22,9 +22,7 @@ export function PlayerProgression({ player, initialData }: { player: Player; ini
     if (data) return;
     setLoading(true);
     try {
-      const res = await fetch(
-        `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players/${player.id}/experiences/history`
-      );
+      const res = await fetch(`/api/players/history?id=${player.id}`);
       const history: HistoryEntry[] = await res.json();
       // Reconstituer l etat a chaque entree
       let state: { age: number; overall: number } = { age: 0, overall: 0 };

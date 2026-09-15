@@ -14,8 +14,10 @@ export const contentType = 'image/png';
 
 // Image generation
 export default async function Image({ params }: { params: { id: string } }) {
+  const token = process.env.MFL_API_TOKEN;
   const player = await fetch(
-    `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players/${params.id}`
+    `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players/${params.id}`,
+    token ? { headers: { 'X-MFL-Api-Token': token } } : {}
   ).then((res) => res.json());
 
   const {

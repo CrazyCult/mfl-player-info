@@ -1,37 +1,32 @@
 import 'server-only';
 import { Listing, Player } from '@/types/global.types';
+import { mflFetch } from '@/lib/mfl-api';
 
 export const getPlayerById = async (id: number) => {
-  const res = await fetch(
-    `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players/${id}`,
-    {
-      cache: 'force-cache',
-      next: { tags: [`players/${id}`], revalidate: 3600 },
-    }
-  );
+  const res = await mflFetch(`/players/${id}`, {
+    cache: 'force-cache',
+    next: { tags: [`players/${id}`], revalidate: 3600 },
+  });
   const { player }: { player: Player } = await res.json();
   return player;
 };
 
 export const getListingByPlayerId = async (id: number) => {
-  const res = await fetch(
-    `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players/${id}`,
-    {
-      cache: 'force-cache',
-      next: { tags: [`players/${id}`], revalidate: 3600 },
-    }
-  );
+  const res = await mflFetch(`/players/${id}`, {
+    cache: 'force-cache',
+    next: { tags: [`players/${id}`], revalidate: 3600 },
+  });
   const { listing }: { listing: Listing } = await res.json();
   return listing;
 };
 
 export const getContactDataByPlayer = async (player: Player) => {
-  const res = await fetch(
-    `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players?limit=100&ageMin=${
-      player.metadata.age - 1
-    }&ageMax=${player.metadata.age + 1}&overallMin=${
-      player.metadata.overall - 1
-    }&overallMax=${player.metadata.overall + 1}&positions=${
+  const res = await mflFetch(
+    `/players?limit=100&ageMin=${player.metadata.age - 1}&ageMax=${
+      player.metadata.age + 1
+    }&overallMin=${player.metadata.overall - 1}&overallMax=${
+      player.metadata.overall + 1
+    }&positions=${
       player.metadata.positions[0]
     }&excludingMflOwned=true&isFreeAgent=false`,
     {
@@ -44,31 +39,31 @@ export const getContactDataByPlayer = async (player: Player) => {
 };
 
 export const getCareerStatsByPlayer = async (player: Player) => {
-  const res = await fetch(
-    `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players/${player.id}/competitions`,
-    {
-      cache: 'force-cache',
-      next: { tags: [`stats/${player.id}`], revalidate: 3600 },
-    }
-  );
+  const res = await mflFetch(`/players/${player.id}/competitions`, {
+    cache: 'force-cache',
+    next: { tags: [`stats/${player.id}`], revalidate: 3600 },
+  });
   const careerStats = await res.json();
   return careerStats;
 };
 
 export const getProgressionByPlayer = async (id: number) => {
-  const res = await fetch(
-    `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players/${id}/experiences/history`,
-    {
-      cache: 'force-cache',
-      next: { tags: [`progression/${id}`], revalidate: 3600 },
-    }
-  );
+  const res = await mflFetch(`/players/${id}/experiences/history`, {
+    cache: 'force-cache',
+    next: { tags: [`progression/${id}`], revalidate: 3600 },
+  });
   return res.json();
 };
 
 export const getContractComparisonByPlayer = async (player: Player) => {
-  const res = await fetch(
-    `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players?limit=500&ageMin=${player.metadata.age - 2}&ageMax=${player.metadata.age + 2}&overallMin=${player.metadata.overall - 2}&overallMax=${player.metadata.overall + 2}&positions=${player.metadata.positions[0]}&excludingMflOwned=true&isFreeAgent=false`,
+  const res = await mflFetch(
+    `/players?limit=500&ageMin=${player.metadata.age - 2}&ageMax=${
+      player.metadata.age + 2
+    }&overallMin=${player.metadata.overall - 2}&overallMax=${
+      player.metadata.overall + 2
+    }&positions=${
+      player.metadata.positions[0]
+    }&excludingMflOwned=true&isFreeAgent=false`,
     {
       cache: 'force-cache',
       next: { tags: [`contract-comparison/${player.id}`], revalidate: 3600 },

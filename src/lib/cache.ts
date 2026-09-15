@@ -1,9 +1,7 @@
 import { unstable_cache, revalidateTag } from 'next/cache';
 import 'server-only';
+import { getMflHeaders } from '@/lib/mfl-api';
 
-/**
- * Cache configuration constants
- */
 export const CACHE_KEYS = {
   PLAYER_SALES: (playerId: number) => `player-sales-${playerId}`,
   MARKET_VALUE: (playerId: number) => `market-value-${playerId}`,
@@ -14,9 +12,6 @@ export const CACHE_TTL = {
   MARKET_VALUES: 3600, // 1 hour
 } as const;
 
-/**
- * Cached fetch wrapper for API calls with automatic tagging
- */
 export async function cachedFetch<T>(
   url: string,
   options: {
@@ -27,6 +22,10 @@ export async function cachedFetch<T>(
 ): Promise<T> {
   const response = await fetch(url, {
     ...options.init,
+    headers: {
+      ...getMflHeaders(),
+      ...(options.init?.headers as Record<string, string> | undefined),
+    },
     next: {
       revalidate: options.revalidate,
       tags: options.tags,
@@ -40,9 +39,6 @@ export async function cachedFetch<T>(
   return response.json();
 }
 
-/**
- * Cache a computed market value with appropriate tags
- */
 export function cacheMarketValue<T>(
   playerId: number,
   calculator: () => Promise<T>,

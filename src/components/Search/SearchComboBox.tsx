@@ -57,7 +57,7 @@ export function SearchComboBox({
         setIsSearching(true);
         try {
           const result: Player[] = await fetch(
-            `https://z519wdyajg.execute-api.us-east-1.amazonaws.com/prod/players?limit=10&sorts=metadata.overall&sortsOrders=DESC&name=${encodeURIComponent(debouncedQuery)}&excludingMflOwned=false`
+            `/api/players/search?name=${encodeURIComponent(debouncedQuery)}`
           ).then((res) => res.json());
           setFilteredOptions(result);
         } catch (error) {
